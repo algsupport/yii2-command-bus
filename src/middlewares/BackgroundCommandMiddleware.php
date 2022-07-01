@@ -54,12 +54,6 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
      */
     public $backgroundHandlerBinaryArguments = [];
 
-    /**
-     * @param            $command
-     * @param callable   $next
-     *
-     * @return string
-     */
     public function execute($command, callable $next)
     {
 
@@ -70,10 +64,6 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
         return $next($command);
     }
 
-    /**
-     * @param BackgroundCommand $command
-     * @return string
-     */
     protected function runProcess(BackgroundCommand $command)
     {
         $binary = $this->getBackgroundHandlerBinary();
@@ -82,7 +72,7 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
         $arguments = implode(' ', $this->getBackgroundHandlerArguments($command));
         $binaryArguments = implode(' ', $this->backgroundHandlerBinaryArguments);
 
-        $process = new Process("{$binary} {$binaryArguments} {$path} {$route} {$arguments}");
+        $process = new Process([$binary, $binaryArguments, $path, $route, $arguments]);
         $process->setTimeout($this->backgroundProcessTimeout);
         $process->setIdleTimeout($this->backgroundProcessIdleTimeout);
         if ($command->isAsync()) {
@@ -111,9 +101,6 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
         return Yii::getAlias($this->backgroundHandlerPath);
     }
 
-    /**
-     * @return mixed
-     */
     public function getBackgroundHandlerRoute()
     {
         return $this->backgroundHandlerRoute;
