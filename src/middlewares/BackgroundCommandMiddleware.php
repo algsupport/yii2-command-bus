@@ -80,6 +80,7 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
         );
 
         $process = new Process($process_command);
+        $process->setOptions(['create_new_console' => true]);
         $process->setTimeout($this->backgroundProcessTimeout);
         $process->setIdleTimeout($this->backgroundProcessIdleTimeout);
         if ($command->isAsync()) {
