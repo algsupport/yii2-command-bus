@@ -3,6 +3,7 @@
 namespace trntv\bus\middlewares;
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\PhpExecutableFinder;
 use trntv\bus\interfaces\BackgroundCommand;
 use trntv\bus\interfaces\Middleware;
 use Yii;
@@ -72,7 +73,13 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
         $arguments = implode(' ', $this->getBackgroundHandlerArguments($command));
         $binaryArguments = implode(' ', $this->backgroundHandlerBinaryArguments);
 
-        $process = new Process([$binary, $binaryArguments, $path, $route, $arguments]);
+        $process_command = array_filter([$binary, $binaryArguments, $path, $route, $arguments],
+            function ($v) {
+                return $v !== "";
+            }
+        );
+
+        $process = new Process($process_command);
         $process->setTimeout($this->backgroundProcessTimeout);
         $process->setIdleTimeout($this->backgroundProcessIdleTimeout);
         if ($command->isAsync()) {
@@ -89,7 +96,7 @@ class BackgroundCommandMiddleware extends BaseObject implements Middleware
      */
     public function getBackgroundHandlerBinary()
     {
-        $binary = $this->backgroundHandlerBinary ?: PHP_BINARY;
+        $binary = $this->backgroundHandlerBinary ?: (new PhpExecutableFinder())->find();
         return Yii::getAlias($binary);
     }
 
