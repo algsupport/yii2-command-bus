@@ -1,5 +1,5 @@
 {
-  "name": "trntv/yii2-command-bus",
+  "name": "algsupport/yii2-command-bus",
   "description": "Yii2 Command Bus extension",
   "keywords": [
     "yii2",
@@ -10,14 +10,14 @@
   "type": "yii2-extension",
   "license": "BSD-3-Clause",
   "support": {
-    "issues": "https://github.com/trntv/yii2-command-bus/issues",
-    "source": "https://github.com/trntv/yii2-command-bus"
+    "issues": "https://github.com/algsupport/yii2-command-bus/issues",
+    "source": "https://github.com/algsupport/yii2-command-bus"
   },
   "minimum-stability": "stable",
   "authors": [
     {
-      "name": "Eugene Terentev",
-      "email": "eugene@terentev.net"
+      "name": "Albert Gukasian",
+      "email": "admin@algsupport.com"
     }
   ],
   "require": {
@@ -25,14 +25,14 @@
     "yiisoft/yii2-queue": "^2.0"
   },
   "suggest": {
-    "symfony/process": "^3.0",
-    "yiisoft/yii2-queue": "^2.0"
+    "symfony/process": "*",
+    "yiisoft/yii2-queue": "*"
   },
   "require-dev": {
-    "yiisoft/yii2-dev": "^2.0",
-    "phpunit/phpunit": "^4.8",
-    "predis/predis": "^1.0",
-    "symfony/process": "^3.0"
+    "yiisoft/yii2-dev": "*",
+    "phpunit/phpunit": "*",
+    "predis/predis": "*",
+    "symfony/process": "*"
   },
   "autoload": {
     "psr-4": {
