@@ -2,6 +2,7 @@
 
 namespace trntv\bus\console;
 
+use Exception;
 use trntv\bus\CommandBus;
 use yii\console\Controller;
 use yii\di\Instance;
@@ -19,28 +20,24 @@ class BackgroundBusController extends Controller
      */
     public $commandBus = 'commandBus';
 
-    /**
-     * @param \yii\base\Action $action
-     * @return bool
-     * @throws \yii\base\InvalidConfigException
-     */
     public function beforeAction($action)
     {
         $this->commandBus = Instance::ensure($this->commandBus, CommandBus::class);
         return parent::beforeAction($action);
     }
 
-    /**
-     * @param string $command serialized command object
-     * @return string
-     */
     public function actionHandle($command)
     {
+        spl_autoload_register(function ($className) {
+            $className = str_replace("app\\", "", $className);
+            $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
+            include_once dirname(__DIR__, 5) . DIRECTORY_SEPARATOR . $className . '.php';
+        });
         try {
             $command = unserialize(base64_decode($command));
             $command->setRunningInBackground(true);
             $this->commandBus->handle($command);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Console::error($e->getMessage());
         }
     }
